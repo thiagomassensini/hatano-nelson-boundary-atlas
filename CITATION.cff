@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the software release."
+title: "Hatano–Nelson Boundary Atlas"
+type: software
+authors:
+  - family-names: Massensini
+    given-names: Thiago
+repository-code: "https://github.com/thiagomassensini/hatano-nelson-boundary-atlas"
+url: "https://github.com/thiagomassensini/hatano-nelson-boundary-atlas"
+license: Apache-2.0
+version: 0.1.0
+date-released: 2026-07-29
+keywords:
+  - Lean 4
+  - Hatano-Nelson
+  - diagonal gauge
+  - cycle holonomy
+  - discrete Green identity
+  - boundary compression
+  - formalized mathematics
