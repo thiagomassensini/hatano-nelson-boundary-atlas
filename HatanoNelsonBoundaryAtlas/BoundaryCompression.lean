@@ -38,15 +38,19 @@ theorem boundaryCorrection_transpose
     (traceMap : Matrix B V K) (delta : Matrix B B K) :
     (boundaryCorrection traceMap delta).transpose =
       boundaryCorrection traceMap delta.transpose := by
-  simp [boundaryCorrection, Matrix.transpose_mul]
+  unfold boundaryCorrection
+  simp only [Matrix.transpose_mul, Matrix.transpose_transpose]
+  rw [mul_assoc]
 
 /-- Exact compression of the boundary Green matrix. -/
 theorem greenMatrix_boundaryCorrection
     (traceMap : Matrix B V K) (delta : Matrix B B K) :
     greenMatrix (boundaryCorrection traceMap delta) =
       boundaryCorrection traceMap (greenMatrix delta) := by
-  simp [greenMatrix, boundaryCorrection, Matrix.transpose_mul]
-  noncomm_ring
+  unfold greenMatrix
+  rw [boundaryCorrection_transpose]
+  unfold boundaryCorrection
+  rw [mul_sub, sub_mul]
 
 /-- The full Green matrix splits into bulk and boundary contributions. -/
 theorem greenMatrix_boundaryOperator
