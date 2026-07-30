@@ -12,7 +12,7 @@ namespace HatanoNelsonBoundaryAtlas
 
 noncomputable section
 
-variable {V K : Type*} [CommField K]
+variable {V K : Type*} [Field K]
 
 /-- Product of carriers along consecutive vertices of a path. -/
 def pathCarrier (r : EdgeCarrier V K) : List V → K

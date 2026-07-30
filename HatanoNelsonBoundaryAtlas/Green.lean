@@ -33,6 +33,13 @@ theorem greenMatrix_transpose (H : Matrix V V K) :
   simp [greenMatrix]
   ring
 
+/-- Taking the Green matrix after transposition reverses its sign. -/
+theorem greenMatrix_of_transpose (H : Matrix V V K) :
+    greenMatrix H.transpose = -greenMatrix H := by
+  ext i j
+  simp [greenMatrix]
+  ring
+
 /-- The Green matrix vanishes exactly for a symmetric matrix. -/
 theorem greenMatrix_eq_zero_iff (H : Matrix V V K) :
     greenMatrix H = 0 ↔ H.transpose = H := by
@@ -79,8 +86,9 @@ theorem greenMatrix_add
 theorem greenForm_transpose
     (H : Matrix V V K) (u v : V → K) :
     greenForm H.transpose u v = -greenForm H u v := by
-  rw [greenForm_eq_greenMatrix, greenForm_eq_greenMatrix]
-  simp [greenMatrix, sub_eq_add_neg, add_comm]
+  rw [greenForm_eq_greenMatrix, greenForm_eq_greenMatrix,
+    greenMatrix_of_transpose]
+  simp
 
 end
 

@@ -18,7 +18,7 @@ namespace HatanoNelsonBoundaryAtlas
 
 noncomputable section
 
-variable {V K : Type*} [Fintype V] [DecidableEq V] [CommField K]
+variable {V K : Type*} [Fintype V] [DecidableEq V] [Field K]
 
 /-- Diagonal similarity written entrywise. -/
 def diagonalGauge (d : V → K) (H : Matrix V V K) : Matrix V V K :=
@@ -41,7 +41,8 @@ theorem diagonalGauge_comp
     diagonalGauge e (diagonalGauge d H) =
       diagonalGauge (fun i => d i * e i) H := by
   ext i j
-  simp [diagonalGauge, mul_inv_rev]
+  simp only [diagonalGauge]
+  rw [mul_inv_rev]
   ring
 
 /-- Entrywise gauge covariance is ordinary diagonal matrix similarity. -/
@@ -50,14 +51,14 @@ theorem diagonalGauge_eq_diagonal_mul
     diagonalGauge d H =
       Matrix.diagonal (fun i => (d i)⁻¹) * H * Matrix.diagonal d := by
   ext i j
-  simp [diagonalGauge, Matrix.mul_apply]
+  simp [diagonalGauge]
 
 /-- A nowhere-zero gauge leaves every diagonal entry unchanged. -/
 theorem diagonalGauge_diagonal
     (d : V → K) (H : Matrix V V K)
     (hd : ∀ i, d i ≠ 0) (i : V) :
     diagonalGauge d H i i = H i i := by
-  simp [diagonalGauge, hd i, mul_assoc]
+  field_simp [diagonalGauge, hd i]
 
 /-- A nowhere-zero diagonal similarity preserves the zero pattern exactly. -/
 theorem diagonalGauge_eq_zero_iff
@@ -96,7 +97,7 @@ theorem carrierMatrix_carrierGauge
     carrierMatrix J (carrierGauge d r) =
       diagonalGauge d (carrierMatrix J r) := by
   ext i j
-  simp [carrierMatrix, carrierGauge, diagonalGauge]
+  simp only [carrierMatrix, carrierGauge, diagonalGauge]
   ring
 
 /-- Nowhere-zero vertex dressing also preserves the carrier zero pattern. -/
