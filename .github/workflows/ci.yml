@@ -61,3 +61,48 @@ jobs:
       - name: Recheck public root
         shell: bash
         run: lake env lean HatanoNelsonBoundaryAtlas.lean
+
+  release:
+    name: Tag and GitHub release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create or verify versioned release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(tr -d '[:space:]' < VERSION)"
+          TAG="v${VERSION}"
+
+          if ! gh release view "${TAG}" >/dev/null 2>&1; then
+            if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+              gh release create "${TAG}" \
+                --verify-tag \
+                --title "Hatano–Nelson Boundary Atlas ${TAG}" \
+                --notes-file RELEASE_NOTES.md
+            else
+              gh release create "${TAG}" \
+                --target "${GITHUB_SHA}" \
+                --title "Hatano–Nelson Boundary Atlas ${TAG}" \
+                --notes-file RELEASE_NOTES.md
+            fi
+          fi
+
+          RELEASE_URL="$(gh release view "${TAG}" --json url --jq .url)"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state=success \
+            -f context="release/${TAG}" \
+            -f description="GitHub release ${TAG} verified" \
+            -f target_url="${RELEASE_URL}"
+          echo "Verified release: ${RELEASE_URL}"

@@ -1,0 +1,23 @@
+{
+  "title": "Hatano–Nelson Boundary Atlas",
+  "description": "Lean 4 formalization of finite diagonal gauge covariance, closed-walk holonomy invariance, the exact bilinear discrete Green identity, and compression of boundary Green defects through a finite boundary atlas.",
+  "upload_type": "software",
+  "license": "Apache-2.0",
+  "version": "0.1.0",
+  "publication_date": "2026-07-29",
+  "creators": [
+    {
+      "name": "Massensini, Thiago"
+    }
+  ],
+  "keywords": [
+    "Lean 4",
+    "formalized mathematics",
+    "Hatano-Nelson",
+    "diagonal gauge",
+    "cycle holonomy",
+    "discrete Green identity",
+    "boundary compression",
+    "low-rank boundary atlas"
+  ]
+}
