@@ -40,7 +40,8 @@ theorem boundaryCorrection_transpose
       boundaryCorrection traceMap delta.transpose := by
   unfold boundaryCorrection
   simp only [Matrix.transpose_mul, Matrix.transpose_transpose]
-  rw [mul_assoc]
+  exact
+    (mul_assoc traceMap.transpose delta.transpose traceMap).symm
 
 /-- Exact compression of the boundary Green matrix. -/
 theorem greenMatrix_boundaryCorrection
@@ -50,7 +51,7 @@ theorem greenMatrix_boundaryCorrection
   unfold greenMatrix
   rw [boundaryCorrection_transpose]
   unfold boundaryCorrection
-  rw [mul_sub, sub_mul]
+  noncomm_ring
 
 /-- The full Green matrix splits into bulk and boundary contributions. -/
 theorem greenMatrix_boundaryOperator

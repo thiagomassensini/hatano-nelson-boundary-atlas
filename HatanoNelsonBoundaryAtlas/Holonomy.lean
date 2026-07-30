@@ -44,7 +44,7 @@ theorem pathCarrier_carrierGauge
       simp only [pathCarrier, lastVertex]
       rw [ih v]
       simp only [carrierGauge]
-      field_simp [hd start, hd v] <;> ring
+      field_simp [hd start, hd v]
 
 /-- Closed-walk holonomy is invariant under vertex dressing. -/
 theorem cycleCarrier_carrierGauge
@@ -55,7 +55,7 @@ theorem cycleCarrier_carrierGauge
   unfold cycleCarrier
   rw [pathCarrier_carrierGauge d hd r start rest]
   simp only [carrierGauge]
-  field_simp [hd start, hd (lastVertex start rest)] <;> ring
+  field_simp [hd start, hd (lastVertex start rest)]
 
 /-- The constant unit carrier has unit product along every path. -/
 @[simp] theorem pathCarrier_one (vertices : List V) :
