@@ -15,7 +15,7 @@ noncomputable section
 
 open Matrix
 
-variable {V K : Type*} [Fintype V] [CommRing K]
+variable {V K : Type*} [CommRing K]
 
 /-- Matrix carrying the bilinear Green defect. -/
 def greenMatrix (H : Matrix V V K) : Matrix V V K :=
@@ -31,19 +31,37 @@ theorem greenMatrix_transpose (H : Matrix V V K) :
     (greenMatrix H).transpose = -greenMatrix H := by
   ext i j
   simp [greenMatrix]
-  ring
 
 /-- Taking the Green matrix after transposition reverses its sign. -/
 theorem greenMatrix_of_transpose (H : Matrix V V K) :
     greenMatrix H.transpose = -greenMatrix H := by
   ext i j
   simp [greenMatrix]
-  ring
 
 /-- The Green matrix vanishes exactly for a symmetric matrix. -/
 theorem greenMatrix_eq_zero_iff (H : Matrix V V K) :
     greenMatrix H = 0 ↔ H.transpose = H := by
-  simp [greenMatrix, eq_comm]
+  constructor
+  · intro h
+    have hs : H = H.transpose := by
+      apply sub_eq_zero.mp
+      simpa [greenMatrix] using h
+    exact hs.symm
+  · intro h
+    apply sub_eq_zero.mpr
+    exact h.symm
+
+/-- The Green matrix is additive. -/
+theorem greenMatrix_add
+    (H G : Matrix V V K) :
+    greenMatrix (H + G) = greenMatrix H + greenMatrix G := by
+  ext i j
+  simp [greenMatrix]
+  ring
+
+section Finite
+
+variable [Fintype V]
 
 /-- Green defect for the symmetric bilinear pairing. -/
 def greenForm
@@ -74,21 +92,15 @@ theorem greenForm_eq_zero_of_symmetric
   rw [greenForm_eq_greenMatrix]
   simp [greenMatrix, hH]
 
-/-- The Green matrix is additive. -/
-theorem greenMatrix_add
-    (H G : Matrix V V K) :
-    greenMatrix (H + G) = greenMatrix H + greenMatrix G := by
-  ext i j
-  simp [greenMatrix]
-  ring
-
 /-- Transposition reverses the Green defect. -/
 theorem greenForm_transpose
     (H : Matrix V V K) (u v : V → K) :
     greenForm H.transpose u v = -greenForm H u v := by
   rw [greenForm_eq_greenMatrix, greenForm_eq_greenMatrix,
     greenMatrix_of_transpose]
-  simp
+  rw [neg_mulVec, dotProduct_neg]
+
+end Finite
 
 end
 

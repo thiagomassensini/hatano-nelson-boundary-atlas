@@ -18,7 +18,7 @@ noncomputable section
 open Matrix
 
 variable {V B K : Type*}
-  [Fintype V] [Fintype B] [CommRing K]
+  [Fintype B] [CommRing K]
 
 /-- Lift a boundary matrix through a boundary observation map. -/
 def boundaryCorrection

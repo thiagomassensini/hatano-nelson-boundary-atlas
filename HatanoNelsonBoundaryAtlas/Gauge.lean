@@ -18,7 +18,7 @@ namespace HatanoNelsonBoundaryAtlas
 
 noncomputable section
 
-variable {V K : Type*} [Fintype V] [DecidableEq V] [Field K]
+variable {V K : Type*} [Field K]
 
 /-- Diagonal similarity written entrywise. -/
 def diagonalGauge (d : V → K) (H : Matrix V V K) : Matrix V V K :=
@@ -47,6 +47,7 @@ theorem diagonalGauge_comp
 
 /-- Entrywise gauge covariance is ordinary diagonal matrix similarity. -/
 theorem diagonalGauge_eq_diagonal_mul
+    [Fintype V] [DecidableEq V]
     (d : V → K) (H : Matrix V V K) :
     diagonalGauge d H =
       Matrix.diagonal (fun i => (d i)⁻¹) * H * Matrix.diagonal d := by
@@ -58,7 +59,13 @@ theorem diagonalGauge_diagonal
     (d : V → K) (H : Matrix V V K)
     (hd : ∀ i, d i ≠ 0) (i : V) :
     diagonalGauge d H i i = H i i := by
-  field_simp [diagonalGauge, hd i]
+  calc
+    diagonalGauge d H i i =
+        H i i * ((d i)⁻¹ * d i) := by
+      simp only [diagonalGauge]
+      ring
+    _ = H i i := by
+      simp [hd i]
 
 /-- A nowhere-zero diagonal similarity preserves the zero pattern exactly. -/
 theorem diagonalGauge_eq_zero_iff
